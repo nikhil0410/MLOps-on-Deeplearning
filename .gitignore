@@ -27,7 +27,7 @@ mlartifacts/
 /.dvc/site_cache/
 
 # DVC - track pointers in git, ignore actual data
-/data/raw
+
 /data/processed
 /models/*.pt
 /models/*.pth
