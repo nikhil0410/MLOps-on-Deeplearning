@@ -1,0 +1,88 @@
+schema: '2.0'
+stages:
+  generate_data:
+    cmd: python -m src.data.generate_synthetic
+    deps:
+    - path: src/data/generate_synthetic.py
+      hash: md5
+      md5: ab52aaa9cc9d060b8ff2ac5f31484a3a
+      size: 3499
+    params:
+      params.yaml:
+        data.image_size: 224
+        data.samples_per_class: 300
+        data.seed: 42
+    outs:
+    - path: data/raw
+      hash: md5
+      md5: 3555a8c5e4a2bd940a42c94b19ecf20e.dir
+      size: 2342663
+      nfiles: 600
+  preprocess:
+    cmd: python -m src.data.preprocess
+    deps:
+    - path: data/raw
+      hash: md5
+      md5: 3555a8c5e4a2bd940a42c94b19ecf20e.dir
+      size: 2342663
+      nfiles: 600
+    - path: src/data/preprocess.py
+      hash: md5
+      md5: 4bf452fe8b35346de149bbb8516cad8d
+      size: 5504
+    params:
+      params.yaml:
+        data.image_size: 224
+        data.seed: 42
+        data.test_split: 0.1
+        data.train_split: 0.8
+        data.val_split: 0.1
+    outs:
+    - path: data/processed
+      hash: md5
+      md5: ac59b55927477667655fc1ff9458a1f2.dir
+      size: 2334438
+      nfiles: 600
+  train:
+    cmd: python -m src.models.train
+    deps:
+    - path: data/processed
+      hash: md5
+      md5: ac59b55927477667655fc1ff9458a1f2.dir
+      size: 2334438
+      nfiles: 600
+    - path: src/data/preprocess.py
+      hash: md5
+      md5: 4bf452fe8b35346de149bbb8516cad8d
+      size: 5504
+    - path: src/models/model.py
+      hash: md5
+      md5: cef195dfd97b4bae66335390b26a5251
+      size: 1614
+    - path: src/models/train.py
+      hash: md5
+      md5: 8dec694a234510ba18be89e7ae822784
+      size: 7879
+    params:
+      params.yaml:
+        train.batch_size: 32
+        train.epochs: 5
+        train.learning_rate: 0.001
+        train.num_classes: 2
+    outs:
+    - path: models/metrics.json
+      hash: md5
+      md5: 0c61dffaafa029023ee9bd73c5a72a61
+      size: 97
+    - path: models/model.pt
+      hash: md5
+      md5: 35d9d0a9968b65608053ce9df7358319
+      size: 103131
+    - path: models/plots/confusion_matrix.png
+      hash: md5
+      md5: f7526342ea1822c48f9b8987ec5c2e86
+      size: 20686
+    - path: models/plots/training_curves.png
+      hash: md5
+      md5: f7fc48093fd5df156fb4ac122c3023d1
+      size: 58560

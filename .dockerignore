@@ -1,0 +1,36 @@
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+
+# Virtual envs
+venv/
+.venv/
+env/
+
+# MLflow experiment tracking (not needed in image)
+mlruns/
+mlartifacts/
+
+# Data (not needed inside inference image)
+data/raw/
+data/processed/
+
+# Docs / CI
+.github/
+*.md
+Assignment*.pdf
+
+# OS
+.DS_Store
+
+# Tests
+tests/

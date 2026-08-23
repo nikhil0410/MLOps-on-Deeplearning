@@ -1,0 +1,58 @@
+# ---------------------------------------------------------------------------
+# Kubernetes Deployment (M4). The image is set to a local tag (`cats-vs-dogs:ci`)
+# so it works with `kind load docker-image` / `minikube image load`.
+# For registry-based deploys, change `image` to your GHCR path, e.g.
+#   ghcr.io/<owner>/<repo>:latest
+# ---------------------------------------------------------------------------
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cats-vs-dogs
+  labels:
+    app: cats-vs-dogs
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: cats-vs-dogs
+  template:
+    metadata:
+      labels:
+        app: cats-vs-dogs
+      annotations:
+        # Prometheus service discovery (M5).
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8000"
+        prometheus.io/path: "/metrics"
+    spec:
+      containers:
+        - name: inference
+          image: cats-vs-dogs:ci
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
+          env:
+            - name: MODEL_PATH
+              value: /app/models/model.pt
+            - name: LOG_LEVEL
+              value: INFO
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: "1"
+              memory: 1Gi
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            failureThreshold: 6
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 20
+            periodSeconds: 20

@@ -1,0 +1,39 @@
+# ---------------------------------------------------------------------------
+# Docker Compose deployment (M4) + monitoring (M5).
+# Runs the inference service and a Prometheus instance that scrapes /metrics.
+#
+#   docker compose up --build      # local build & run
+#   IMAGE=ghcr.io/<owner>/<repo>:latest docker compose up   # run a pulled image
+# ---------------------------------------------------------------------------
+services:
+  inference:
+    build: .
+    image: ${IMAGE:-cats-vs-dogs:latest}
+    container_name: cats-vs-dogs
+    ports:
+      - "8000:8000"
+    environment:
+      - MODEL_PATH=/app/models/model.pt
+      - LOG_LEVEL=INFO
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://localhost:8000/health').status==200 else 1)"
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+
+  prometheus:
+    image: prom/prometheus:v2.51.0
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    depends_on:
+      - inference
+    restart: unless-stopped

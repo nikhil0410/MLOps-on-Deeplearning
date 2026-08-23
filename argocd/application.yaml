@@ -1,0 +1,27 @@
+# ---------------------------------------------------------------------------
+# Optional Argo CD Application (M4 - GitOps alternative to the CD workflow).
+# Point `repoURL` at your fork and Argo CD will continuously sync the k8s/
+# manifests to the cluster whenever main changes.
+#
+#   kubectl apply -n argocd -f argocd/application.yaml
+# ---------------------------------------------------------------------------
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cats-vs-dogs
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/<owner>/<repo>.git
+    targetRevision: main
+    path: k8s
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

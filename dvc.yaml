@@ -1,0 +1,52 @@
+# ---------------------------------------------------------------------------
+# DVC pipeline (M1). Reproduce the full data->model flow with `dvc repro`.
+# Each stage is cached and re-runs only when its deps/params change.
+# ---------------------------------------------------------------------------
+stages:
+  generate_data:
+    cmd: python -m src.data.generate_synthetic
+    deps:
+      - src/data/generate_synthetic.py
+    params:
+      - data.samples_per_class
+      - data.image_size
+      - data.seed
+    outs:
+      - data/raw
+
+  preprocess:
+    cmd: python -m src.data.preprocess
+    deps:
+      - src/data/preprocess.py
+      - data/raw
+    params:
+      - data.image_size
+      - data.train_split
+      - data.val_split
+      - data.test_split
+      - data.seed
+    outs:
+      - data/processed
+
+  train:
+    cmd: python -m src.models.train
+    deps:
+      - src/models/train.py
+      - src/models/model.py
+      - src/data/preprocess.py
+      - data/processed
+    params:
+      - train.epochs
+      - train.batch_size
+      - train.learning_rate
+      - train.num_classes
+    outs:
+      - models/model.pt
+    metrics:
+      - models/metrics.json:
+          cache: false
+    plots:
+      - models/plots/training_curves.png:
+          cache: false
+      - models/plots/confusion_matrix.png:
+          cache: false

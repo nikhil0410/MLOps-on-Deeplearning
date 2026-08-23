@@ -1,0 +1,26 @@
+# ---------------------------------------------------------------------------
+# Runtime dependencies for the inference service (kept minimal for a lean image)
+# All versions are pinned for reproducibility (M2 requirement).
+# ---------------------------------------------------------------------------
+
+# Deep learning (CPU builds are installed via the PyTorch CPU index in Docker)
+torch==2.2.2
+torchvision==0.17.2
+
+# Numerics / image handling
+numpy==1.26.4
+Pillow==10.3.0
+
+# REST API
+fastapi==0.110.1
+uvicorn[standard]==0.29.0
+python-multipart==0.0.9
+pydantic==2.7.1
+pydantic-settings==2.2.1
+
+# Config
+PyYAML==6.0.1
+
+# Monitoring & structured logging
+prometheus-client==0.20.0
+python-json-logger==2.0.7

@@ -1,0 +1,11 @@
+{
+  "timestamp": "2026-07-30T07:55:49.130748+00:00",
+  "endpoint": "http://127.0.0.1:8000",
+  "num_requests": 40,
+  "accuracy": 1.0,
+  "avg_inference_ms": 5.63,
+  "confusion": {
+    "true=cats,pred=cats": 20,
+    "true=dogs,pred=dogs": 20
+  }
+}

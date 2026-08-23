@@ -1,0 +1,35 @@
+# ---------------------------------------------------------------------------
+# Central configuration for the pipeline. Consumed by DVC stages, training,
+# and the inference service. Keeping params here makes runs reproducible and
+# lets DVC detect parameter changes.
+# ---------------------------------------------------------------------------
+
+data:
+  raw_dir: data/raw
+  processed_dir: data/processed
+  image_size: 224            # 224x224 RGB, standard CNN input
+  samples_per_class: 300     # synthetic images generated per class
+  train_split: 0.8           # 80% train
+  val_split: 0.1             # 10% validation
+  test_split: 0.1            # 10% test
+  seed: 42
+
+train:
+  epochs: 5
+  batch_size: 32
+  learning_rate: 0.001
+  num_classes: 2
+  num_workers: 0
+  model_dir: models
+  model_name: model.pt
+  metrics_file: models/metrics.json
+  plots_dir: models/plots
+
+classes:
+  - cats
+  - dogs
+
+mlflow:
+  experiment_name: cats-vs-dogs
+  tracking_uri: mlruns       # local file store
+  run_name: baseline-cnn
