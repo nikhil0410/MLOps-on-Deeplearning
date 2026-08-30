@@ -26,13 +26,24 @@ def _make_test_image() -> bytes:
         Image.new("RGB", (64, 64), (200, 90, 40)).save(buf, format="JPEG")
         return buf.getvalue()
     except Exception:
-        # 1x1 red JPEG (base64-free, minimal valid JPEG).
+        # 8x8 solid-colour JPEG fallback (valid, decodable without Pillow).
         import base64
 
         b64 = (
-            "/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAP//////////////////////////////"
-            "////////////////////////////////////////////////wgALCAABAAEBAREA"
-            "/8QAFBABAAAAAAAAAAAAAAAAAAAAAP/aAAgBAQABPxA="
+            "/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkS"
+            "Ew8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJ"
+            "CQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIy"
+            "MjIyMjIyMjIyMjIyMjL/wAARCAAIAAgDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEA"
+            "AAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIh"
+            "MUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6"
+            "Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZ"
+            "mqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx"
+            "8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREA"
+            "AgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAV"
+            "YnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hp"
+            "anN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPE"
+            "xcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwCp"
+            "RRRXzB9of//Z"
         )
         return base64.b64decode(b64)
 
@@ -87,7 +98,7 @@ def main() -> int:
         return 1
     print(f"[PASS] predict -> {body}")
 
-    print("\nSmoke test PASSED ✅")
+    print("\nSmoke test PASSED ?")
     return 0
 
 
