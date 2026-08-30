@@ -70,7 +70,7 @@ jobs:
 
       - name: Post-deployment performance check
         run: |
-          python -m pip install --quiet pillow==10.3.0 pyyaml==6.0.1
+          python -m pip install --quiet pillow==10.3.0 pyyaml==6.0.1 numpy==1.26.4
           python scripts/simulate_requests.py --url http://localhost:8000 --n 20
 
       - name: Show deployment status
