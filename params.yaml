@@ -5,6 +5,10 @@
 # ---------------------------------------------------------------------------
 
 data:
+  # ``real`` preserves an externally supplied Cats-vs-Dogs dataset in
+  # ``data/raw``; switch to ``synthetic`` only for a lightweight demo run.
+  source: synthetic
+  source_commit: nikhil0410/MLOps-on-Deeplearning@8953621449c6927ae47894a8fbb583c825b1c117
   raw_dir: data/raw
   processed_dir: data/processed
   image_size: 224            # 224x224 RGB, standard CNN input
@@ -19,7 +23,8 @@ train:
   batch_size: 32
   learning_rate: 0.001
   num_classes: 2
-  num_workers: 4
+  # Keep DVC/CI runs portable on hosts without multiprocessing shared memory.
+  num_workers: 0
   model_dir: models
   model_name: model.pt
   metrics_file: models/metrics.json
