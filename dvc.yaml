@@ -3,16 +3,6 @@
 # Each stage is cached and re-runs only when its deps/params change.
 # ---------------------------------------------------------------------------
 stages:
-  generate_data:
-    cmd: python -m src.data.generate_synthetic
-    deps:
-      - src/data/generate_synthetic.py
-    params:
-      - data.samples_per_class
-      - data.image_size
-      - data.seed
-    outs:
-      - data/raw
 
   preprocess:
     cmd: python -m src.data.preprocess

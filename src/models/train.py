@@ -82,11 +82,19 @@ def _plot_confusion(y_true, y_pred, class_names, out_path: Path) -> None:
     fig.savefig(out_path, dpi=120)
     plt.close(fig)
 
+def _select_device() -> torch.device:
+    """Select GPU if available, else CPU."""
+    if torch.cuda.is_available():
+        return torch.device("cuda")
+    if torch.backends.mps.is_available():
+        return torch.device("mps")
+    return torch.device("cpu")
 
 def train() -> Dict[str, float]:
     params = load_params()
     d, t, m = params["data"], params["train"], params["mlflow"]
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    device = _select_device()
+    print(f"Using device: {device}")
 
     model_dir = Path(t["model_dir"]); model_dir.mkdir(parents=True, exist_ok=True)
     plots_dir = Path(t["plots_dir"]); plots_dir.mkdir(parents=True, exist_ok=True)
